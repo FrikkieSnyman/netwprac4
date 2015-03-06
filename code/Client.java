@@ -158,7 +158,7 @@ public class Client implements Runnable{
 //**************************************************************************************            
             else if (splitGetRequest[0].compareTo("/delete") == 0){
                 try{
-                    String httpResponse = getHtmlText("Html_Page/print.html");
+                    String httpResponse = getHtmlText("Html_Page/delete.html");
                     String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
                     socketOut.write("HTTP/1.1 200 OK\r\n");
                     socketOut.write("Content-Type: text/html\r\n");
