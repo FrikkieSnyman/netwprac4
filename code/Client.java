@@ -24,6 +24,7 @@ public class Client implements Runnable{
     @Override
     public void run(){
         try {            
+            // handleGet(get);
             // temporary infinite loop
             // while (true) {
                 Scanner socketReader = new Scanner(server.getInputStream());
@@ -32,7 +33,9 @@ public class Client implements Runnable{
                 // request to server
                 String httpRequest = "";
 
-                System.out.println("-- awaiting http request --");  
+                while (socketReader.hasNext()){
+                    System.out.println(socketReader.next());  
+                }
                 // // does not read all text from socket
                 // do {
                 //     httpRequest += socketReader.next() + "\n";
@@ -99,6 +102,8 @@ public class Client implements Runnable{
             System.out.println("-- exception thrown closing server --");
             System.out.println("-- " + e.getMessage() + " --");
             e.printStackTrace();
+        } finally {
+            System.out.println("Thread closed");
         }
     }
 
