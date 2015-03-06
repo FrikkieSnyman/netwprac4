@@ -135,6 +135,13 @@ public class Client implements Runnable{
                     e.printStackTrace();
                 }                
             }
+            else if (splitGetRequest[0].compareTo("/delete") == 0){
+                try{
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
