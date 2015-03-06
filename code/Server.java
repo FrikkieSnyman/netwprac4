@@ -24,6 +24,7 @@ public class Server{
             while (true){
                 server = listener.accept();
                 Client client = new Client(server,connections++);
+                System.out.println("New connection. Connection nr: " + connections);
                 Thread t = new Thread(client);
                 t.start();
             }
