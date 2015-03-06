@@ -19,12 +19,20 @@
 	</head>
 	<body>
 		<div id="functionDiv">
+			<form>
+				<fieldset>
+					<legend>Add user</legend>
+					<input name="name" type="text" placeholder="Name" />
+					<input name="number" type="text" placeholder="Phone" />
+					<input name="photo" type="file" /><br /><br />
+					<button type="submit" formaction="/add">Add user</button>
+				</fieldset>
+			</form>
 			<form action="" method="GET">
 				<fieldset>
-					<legend>Add/Find user</legend>
+					<legend>Find user</legend>
 					<input name="name" type="text" placeholder="Name" />
 					<input name="number" type="text" placeholder="Phone" /><br /><br />
-					<button type="submit" formaction="/add">Add user</button>
 					<button type="submit" formaction="/find"> Search for entry </button>
 				</fieldset>
 			</form>

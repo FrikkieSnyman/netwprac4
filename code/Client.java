@@ -96,9 +96,11 @@ public class Client implements Runnable{
                     System.out.println("Adding new user");
                     String tempName = parameters[0].substring(5, parameters[0].length());
                     String tempNum = parameters[1].substring(7, parameters[1].length());
+                    String tempPhoto = parameters[2];
 
                     System.out.println("-- Name: ." + tempName.replace('+', ' ') + ".");
                     System.out.println("-- Number: ." + tempNum + ".");
+                    System.out.println("-- Photo: ." + tempPhoto + ".");
                     addUser(
                             tempName.replace('+', ' '),
                             tempNum
