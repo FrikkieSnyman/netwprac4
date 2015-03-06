@@ -59,6 +59,9 @@ public class Client implements Runnable{
             }
         } else{
             String[] splitGetRequest = getRequest.split("\\?",-1);
+//**************************************************************************************
+// PRINT ALL USERS
+//**************************************************************************************            
             if (splitGetRequest[0].compareTo("/print") == 0){
                 try{
                     String httpResponse = getHtmlText("Html_Page/print.html");
@@ -75,6 +78,11 @@ public class Client implements Runnable{
                     e.printStackTrace();
                 }
             }
+//**************************************************************************************
+            
+//**************************************************************************************
+// ADD USER            
+//**************************************************************************************
             else if (splitGetRequest[0].compareTo("/add") == 0) {
                 try {
                     String httpResponse = getHtmlText("Html_Page/add.html");
@@ -105,6 +113,11 @@ public class Client implements Runnable{
                     e.printStackTrace();
                 }
             }
+//**************************************************************************************
+
+//**************************************************************************************
+// FIND USER
+//**************************************************************************************            
             else if (splitGetRequest[0].compareTo("/find") == 0) {
                 try {
                     String httpResponse = getHtmlText("Html_Page/add.html");
@@ -135,6 +148,11 @@ public class Client implements Runnable{
                     e.printStackTrace();
                 }                
             }
+//**************************************************************************************
+
+//**************************************************************************************
+// DELETE USER
+//**************************************************************************************            
             else if (splitGetRequest[0].compareTo("/delete") == 0){
                 try{
 
@@ -142,6 +160,7 @@ public class Client implements Runnable{
                     e.printStackTrace();
                 }
             }
+//**************************************************************************************
         }
     }
 
