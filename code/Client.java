@@ -30,14 +30,14 @@ public class Client implements Runnable{
                 // socketReader.useDelimiter("\n");
                 PrintWriter socketOut = new PrintWriter(new BufferedOutputStream(server.getOutputStream()));
                 // request to server
-                // String httpRequest = "";
+                String httpRequest = "";
 
                 System.out.println("-- awaiting http request --");  
                 // // does not read all text from socket
                 // do {
                 //     httpRequest += socketReader.next() + "\n";
                 // } while (httpRequest.charAt(0) != 'G');
-                // // System.out.println("-- request reveived --");
+                // System.out.println("-- request reveived --");
                 // System.out.println(httpRequest);
                 // // parse request here to determine action
                 // StringTokenizer tokenizer = new StringTokenizer(httpRequest, " ");
@@ -80,14 +80,14 @@ public class Client implements Runnable{
                 // buildingResp = buildingResp.concat(tempString);
                 // htmlResponse = buildingResp;
                 // System.out.println(buildingResp);
-
-                socketOut.println("HTTP/1.1 200 OK");
-                socketOut.println("Content-Type: text/html");
-                socketOut.println("Content-length: 11");
-                // socketOut.println("Connection: closed\n");
-                // socketOut.println("Cache-control: no-cache\n");
-                // socketOut.println("Content-length: " + htmlResponse.length() + "\n\n");
-                socketOut.println("Hello world");
+                String helloWorld = "<html><body>helloWorld </body></html>";
+                socketOut.write("HTTP/1.1 200 OK\r\n");
+                socketOut.write("Content-Type: text/html\r\n");
+                socketOut.write("Content-length: " + helloWorld.length() + "\r\n");
+                // socketOut.write("Connection: closed\r\n");
+                // socketOut.write("Cache-control: no-cache\r\n\r\n");
+                // socketOut.write("Content-length: " + htmlResponse.length() + "\n\n");
+                socketOut.write("\r\n" + helloWorld + "\r\n\r\n");
                 socketOut.flush();
             // }           
         }
