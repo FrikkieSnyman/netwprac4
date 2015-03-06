@@ -120,8 +120,8 @@ public class Client implements Runnable{
 //**************************************************************************************            
             else if (splitGetRequest[0].compareTo("/find") == 0) {
                 try {
-                    String httpResponse = getHtmlText("Html_Page/add.html");
-                    String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
+                    String httpResponse = getHtmlText("Html_Page/find.html");
+                    String[] splitHtml = httpResponse.split("\\?\\?\\?", 3);
                     socketOut.write("HTTP/1.1 200 OK\r\n");
                     socketOut.write("Content-Type: text/html\r\n");
 
@@ -135,12 +135,15 @@ public class Client implements Runnable{
                     // System.out.println("-- Name: ." + tempName.replace('+', ' ') + ".");
                     // System.out.println("-- Number: ." + tempNum + ".");
                     
-                    String databaseResponse = find(tempName.replace('+', ' '), null);
-                    databaseResponse += find(tempNum, null);
-                    databaseResponse.replaceAll("\n", "<br />");
+                    String databaseResponseNameSearch = find(tempName.replace('+', ' '), null);
+                    String databaseResponseNumberSearch = find(tempNum, null);
+                    databaseResponseNameSearch.replaceAll("\n", "<br />");
+                    databaseResponseNumberSearch.replaceAll("\n", "<br />");
 
-                    splitHtml[0] += databaseResponse;
+                    splitHtml[0] += databaseResponseNameSearch;
                     splitHtml[0] += splitHtml[1];
+                    splitHtml[0] += databaseResponseNumberSearch;
+                    splitHtml[0] += splitHtml[2];
                     socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
                     socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
                     socketOut.flush();                                
@@ -322,8 +325,8 @@ public class Client implements Runnable{
                         out.println("Contact found.");
                         out.println(friendList.get(i).toString());                        
                     }
-                    returnString = "Contact found";
-                    returnString += friendList.get(i).toString();
+                    // returnString = "Contact found";
+                    returnString = friendList.get(i).toString();
                     returnString += "\n";
                     return returnString;
                 }
@@ -348,8 +351,8 @@ public class Client implements Runnable{
                         out.println("Contact found.");
                         out.println(friendList.get(i).toString());                        
                     }
-                    returnString = "Contact found";
-                    returnString += friendList.get(i).toString();
+                    // returnString = "Contact found";
+                    returnString = friendList.get(i).toString();
                     returnString += "\n";
                     return returnString;
                 }
