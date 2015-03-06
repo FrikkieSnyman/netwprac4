@@ -41,6 +41,6 @@ public class Friend implements Serializable{
 
     @Override
     public String toString(){
-        return new StringBuffer("Name: ").append(this.name).append("\t\tNumber: ").append(this.number).toString();
+        return new StringBuffer("<div class=\"printOut\">Name: ").append(this.name).append("<br />Number: ").append(this.number).append("</div>").toString();
     }
 }

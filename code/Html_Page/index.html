@@ -3,17 +3,29 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>COS332 - Practical 4 </title>
+		<style type="text/css">
+			#functionDiv{
+				width: 75%;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			form{
+				width: 75%;
+				margin-left: auto;
+				margin-right: auto;
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="functionDiv">
 			<form action="" method="GET">
 				<fieldset>
-					<legend>Add</legend>
+					<legend>Add/Find user</legend>
 					<input name="name" type="text" placeholder="Name" />
-					<input name="number" type="text" placeholder="Phone" />
-					<button type="submit" formaction="/add">Submit</button>
+					<input name="number" type="text" placeholder="Phone" /><br /><br />
+					<button type="submit" formaction="/add">Add user</button>
 					<button type="submit" formaction="/find"> Search for entry </button>
-					<button type="submit" formaction="/delete"> Delete user </button>
 				</fieldset>
 			</form>
 			<form action="/print" method="GET">
@@ -22,7 +34,14 @@
 					<button type="submit" method="GET">Print all names</button>
 				</fieldset>
 			</form>
+			<form action="" method="GET">
+				<fieldset>
+					<legend>Delete User</legend>
+					<input name="name" type="text" placeholder="Name" />
+					<input name="number" type="text" placeholder="Phone" /><br /><br />
+					<button type="submit" formaction="/delete"> Delete user </button>
+				</fieldset>
+			</form>
 		</div>
-
 	</body>
 </html>
