@@ -23,75 +23,24 @@ public class Client implements Runnable{
 
     @Override
     public void run(){
-        try {            
-            // handleGet(get);
-            // temporary infinite loop
-            // while (true) {
+        try {
                 Scanner socketReader = new Scanner(server.getInputStream());
-                // socketReader.useDelimiter("\n");
+                
                 PrintWriter socketOut = new PrintWriter(new BufferedOutputStream(server.getOutputStream()));
-                // request to server
-                String httpRequest = "";
+             
+                String getRequest = socketReader.next();
+                String urlRequest = socketReader.next();
 
-                while (socketReader.hasNext()){
-                    System.out.println(socketReader.next());  
-                }
-                // // does not read all text from socket
-                // do {
-                //     httpRequest += socketReader.next() + "\n";
-                // } while (httpRequest.charAt(0) != 'G');
-                // System.out.println("-- request reveived --");
-                // System.out.println(httpRequest);
-                // // parse request here to determine action
-                // StringTokenizer tokenizer = new StringTokenizer(httpRequest, " ");
-                // String command = "";
-                // String directory = "";
-                // if (tokenizer.hasMoreTokens()) {
-                //     command = tokenizer.nextToken();
-                //     if (tokenizer.hasMoreTokens()) {
-                //         directory = tokenizer.nextToken();
-                //         if (directory.equals("/favicon.ico") == true) {
-                //             directory = "";
-                //         }
-                //     }
-                //     else {
-                //         throw new Exception("No directory token");
-                //     }
-                // }
-                // else {
-                //     throw new Exception("No command token");
-                // }
+                handleGETRequest(urlRequest, socketOut);
 
-                // // if (directory.length() > 0) {
-                // //     // calculationString += directory;
-                // //     calculationString += rectifyCalcString(directory);
-                // // }
-                // // System.out.println("\t* calculationString: " + calculationString);
-                // // System.out.println(calculationString);
-                // // generate html to send to server
-                // String htmlResponse = getHtmlText("./Html_Page/index.html");
+                System.out.println(getRequest + " " +  urlRequest);
 
-                // manipulate html to display calculation
-                // int splitIndex = htmlResponse.indexOf("<p id=\"calculationDisplay\"></p>");
-//              System.out.println(" * index: " + splitIndex);
-                // String buildingResp = htmlResponse.substring(0, splitIndex - 1);
-
-                // String tempString = "<p id=\"calculationDisplay\">" + calculationString + " = " + evaluateStringEquation(calculationString) + "</p>";
-                // buildingResp = buildingResp.concat(tempString);
-                // tempString = htmlResponse.substring(splitIndex + (new String("<p id=\"calculationDisplay\"></p>")).length(), htmlResponse.length());
-                // buildingResp = buildingResp.concat(calculationString);
-                // buildingResp = buildingResp.concat(tempString);
-                // htmlResponse = buildingResp;
-                // System.out.println(buildingResp);
-                String helloWorld = "<html><body>helloWorld </body></html>";
-                socketOut.write("HTTP/1.1 200 OK\r\n");
-                socketOut.write("Content-Type: text/html\r\n");
-                socketOut.write("Content-length: " + helloWorld.length() + "\r\n");
-                // socketOut.write("Connection: closed\r\n");
-                // socketOut.write("Cache-control: no-cache\r\n\r\n");
-                // socketOut.write("Content-length: " + htmlResponse.length() + "\n\n");
-                socketOut.write("\r\n" + helloWorld + "\r\n\r\n");
-                socketOut.flush();
+                // String helloWorld = "<html><body>helloWorld </body></html>";
+                // socketOut.write("HTTP/1.1 200 OK\r\n");
+                // socketOut.write("Content-Type: text/html\r\n");
+                // socketOut.write("Content-length: " + helloWorld.length() + "\r\n");
+                // socketOut.write("\r\n" + helloWorld + "\r\n\r\n");
+                // socketOut.flush();
             // }           
         }
         catch (IOException e) {
@@ -103,8 +52,40 @@ public class Client implements Runnable{
             System.out.println("-- " + e.getMessage() + " --");
             e.printStackTrace();
         } finally {
-            System.out.println("Thread closed");
+            System.out.println("Responded to request");
         }
+    }
+
+    public void handleGETRequest(String getRequest, PrintWriter socketOut){
+        if (getRequest.compareTo("/") == 0){
+            try{
+                String httpResponse = getHtmlText("Html_Page/index.html");
+                printHtmlResponse(httpResponse,socketOut);                
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else{
+            String[] splitGetRequest = getRequest.split("\\?",-1);
+            if (splitGetRequest[0].compareTo("/print") == 0){
+                try{
+                    String httpResponse = getHtmlText("Html_Page/print.html");
+                    String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
+                    socketOut.write("HTTP/1.1 200 OK\r\n");
+                    socketOut.write("Content-Type: text/html\r\n");
+                    splitHtml[0].concat(print());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void printHtmlResponse(String httpResponse, PrintWriter socketOut){
+        socketOut.write("HTTP/1.1 200 OK\r\n");
+        socketOut.write("Content-Type: text/html\r\n");
+        socketOut.write("Content-length: " + httpResponse.length() + "\r\n");
+        socketOut.write("\r\n" + httpResponse + "\r\n\r\n");
+        socketOut.flush();
     }
 
     public static String getHtmlText(String fp) throws FileNotFoundException, IOException {
@@ -309,16 +290,19 @@ public class Client implements Runnable{
         return true;
     }
 
-    private void print(PrintStream out){
+    private String print(){
+        String returnThis = "";
         r.lock();
         try {
             friendList = read();
             for (int i = 0; i < friendList.size(); ++i) {
-                out.println(friendList.get(i).toString());
+                returnThis.concat(friendList.get(i).toString());
             }
         } finally {
             r.unlock();
         }
+
+        return returnThis;
     }
 
     private void printFile(ArrayList<Friend> friendList){
