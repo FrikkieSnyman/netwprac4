@@ -119,15 +119,14 @@ public class Client implements Runnable{
                     String tempName = parameters[0].substring(5, parameters[0].length());
                     String tempNum = parameters[1].substring(7, parameters[1].length());
 
-                    System.out.println("-- Name: ." + tempName.replace('+', ' ') + ".");
-                    System.out.println("-- Number: ." + tempNum + ".");
-                    // find(
-                            // tempName.replace('+', ' '),
-                            // socketOut.
-                        // );
+                    // System.out.println("-- Name: ." + tempName.replace('+', ' ') + ".");
+                    // System.out.println("-- Number: ." + tempNum + ".");
+                    
+                    String databaseResponse = find(tempName.replace('+', ' '), null);
+                    databaseResponse += find(tempNum, null);
+                    databaseResponse.replaceAll("\n", "<br />");
 
-
-                    splitHtml[0] += print();
+                    splitHtml[0] += databaseResponse;
                     splitHtml[0] += splitHtml[1];
                     socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
                     socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
@@ -246,47 +245,65 @@ public class Client implements Runnable{
         }
     }
 
-    private void find(String criteria, PrintStream out){
+    private String find(String criteria, PrintStream out){
         String digits = "[0-9]+";
+        String returnString = "";
 
         if (criteria.matches(digits)){
-            findByNumber(criteria,out);
+            returnString = findByNumber(criteria,out);
         } else{
-            findByName(criteria,out);
+            returnString = findByName(criteria,out);
         }
-
+        return returnString;
     }
 
-    private void findByNumber(String criteria, PrintStream out){
+    private String findByNumber(String criteria, PrintStream out){
         r.lock();
         try{
+            String returnString = "";
             friendList = read();
             for (int i = 0; i < friendList.size(); ++i){
-                if (friendList.get(i).getNumber().equals(criteria)){
-                    out.println("Contact found.");
-                    out.println(friendList.get(i).toString());
-                    return;
+                if (friendList.get(i).getNumber().equals(criteria)) {
+                    if (out != null) {
+                        out.println("Contact found.");
+                        out.println(friendList.get(i).toString());                        
+                    }
+                    returnString = "Contact found";
+                    returnString += friendList.get(i).toString();
+                    returnString += "\n";
+                    return returnString;
                 }
             }
-            out.println("Contact not in database.");
+            if (out != null)
+                out.println("Contact not in database.");
+            returnString = "Contact not in database.\n";
+            return returnString;
         } finally {
             r.unlock();
         }
     }
 
-    private void findByName(String criteria, PrintStream out){
+    private String findByName(String criteria, PrintStream out){
         r.lock();
         try {
+            String returnString;
             friendList = read();
             for (int i = 0; i < friendList.size(); ++i){
                 if (friendList.get(i).getName().equals(criteria)){
-                    out.println("Contact found.");
-                    out.println(friendList.get(i).toString());
-                    return;
+                    if (out != null) {
+                        out.println("Contact found.");
+                        out.println(friendList.get(i).toString());                        
+                    }
+                    returnString = "Contact found";
+                    returnString += friendList.get(i).toString();
+                    returnString += "\n";
+                    return returnString;
                 }
             }
-
-            out.println("Contact not in database.");
+            if (out != null)
+                out.println("Contact not in database.");
+            returnString = "Contact not in database.\n";
+            return returnString;
         } finally {
             r.unlock();
         }
