@@ -49,7 +49,7 @@ public class Client implements Runnable{
         }
     }
 
-    public void handleGETRequest(String getRequest, PrintWriter socketOut){
+    private void handleGETRequest(String getRequest, PrintWriter socketOut){
         if (getRequest.compareTo("/") == 0){
             try{
                 String httpResponse = getHtmlText("Html_Page/index.html");
@@ -146,7 +146,7 @@ public class Client implements Runnable{
         socketOut.flush();
     }
 
-    public static String getHtmlText(String fp) throws FileNotFoundException, IOException {
+    private static String getHtmlText(String fp) throws FileNotFoundException, IOException {
         // File file = new File(fp);
         FileReader reader = new FileReader(fp);
         BufferedReader br = new BufferedReader(reader);
@@ -158,7 +158,7 @@ public class Client implements Runnable{
         return ret;
     }
 
-    private void updateName(String oldName, String newName, PrintStream out){
+    private Boolean updateName(String oldName, String newName){
         Boolean found = false;
         r.lock();
         try{
@@ -166,14 +166,14 @@ public class Client implements Runnable{
             for (int i = 0; i < friendList.size(); ++i){
                 if (friendList.get(i).getName().equals(oldName)){
                     friendList.get(i).setName(newName);
-                    out.println("Friend contact details updated.");
+                    System.out.println("Friend contact details updated.");
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                out.println("No such friend found in database.");
+                System.out.println("No such friend found in database.");
             }
         } finally {
             r.unlock();
@@ -185,9 +185,11 @@ public class Client implements Runnable{
         } finally {
             w.unlock();
         }
+
+        return found;
     }
 
-    private void updateNumber(String name, String newNumber, PrintStream out){
+    private Boolean updateNumber(String name, String newNumber){
         Boolean found = false;
         r.lock();
         try{
@@ -195,14 +197,14 @@ public class Client implements Runnable{
             for (int i = 0; i < friendList.size(); ++i){
                 if (friendList.get(i).getName().equals(name)){
                     friendList.get(i).setNumber(newNumber);
-                    out.println("Friend contact details updated.");
+                    System.out.println("Friend contact details updated.");
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                out.println("No such friend found in database.");
+                System.out.println("No such friend found in database.");
             }
         } finally {
             r.unlock();
@@ -214,9 +216,11 @@ public class Client implements Runnable{
         } finally {
             w.unlock();
         }
+
+        return found;
     }
 
-    private void delete(String name, String number, PrintStream out){
+    private Boolean delete(String name, String number){
         Friend contact = getFriendWithName(name);
 
         if (contact != null && contact.getNumber().equals(number)){
@@ -239,9 +243,11 @@ public class Client implements Runnable{
             } finally {
                 w.unlock();
             }
-            out.println("Contact deleted.");
+            System.out.println("Contact deleted.");
+            return true;
         } else{
-            out.println("No such person with name and number combination in database");
+            System.out.println("No such person with name and number combination in database");
+            return false;
         }
     }
 
