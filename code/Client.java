@@ -79,7 +79,7 @@ public class Client implements Runnable{
                 }
             }
 //**************************************************************************************
-            
+
 //**************************************************************************************
 // ADD USER            
 //**************************************************************************************
@@ -128,7 +128,7 @@ public class Client implements Runnable{
                     String[] parameters = splitGetRequest[1].split("\\&");
                     // System.out.println("-- Name: " + parameters[0]);
                     // System.out.println("-- Number: " + parameters[1]);
-                    System.out.println("Adding new user");
+                    
                     String tempName = parameters[0].substring(5, parameters[0].length());
                     String tempNum = parameters[1].substring(7, parameters[1].length());
 
@@ -155,6 +155,28 @@ public class Client implements Runnable{
 //**************************************************************************************            
             else if (splitGetRequest[0].compareTo("/delete") == 0){
                 try{
+                    String httpResponse = getHtmlText("Html_Page/print.html");
+                    String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
+                    socketOut.write("HTTP/1.1 200 OK\r\n");
+                    socketOut.write("Content-Type: text/html\r\n");
+
+                    String[] parameters = splitGetRequest[1].split("\\&");
+                    String tempName = parameters[0].substring(5, parameters[0].length());
+                    String tempNum = parameters[1].substring(7, parameters[1].length());
+
+                    if (delete(tempName, tempNum)){
+                        splitHtml[0] += "Contact succesfully deleted";
+                        splitHtml[0] += splitHtml[1];
+                        socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
+                        socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
+                        socketOut.flush();                             
+                    } else{
+                        splitHtml[0] += "No contact deleted";
+                        splitHtml[0] += splitHtml[1];
+                        socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
+                        socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
+                        socketOut.flush();
+                    }
 
                 } catch (Exception e){
                     e.printStackTrace();
