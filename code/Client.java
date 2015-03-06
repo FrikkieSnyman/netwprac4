@@ -24,6 +24,7 @@ public class Client implements Runnable{
     @Override
     public void run(){
         try {
+                // addUser("Frikkie","0827079070");
                 Scanner socketReader = new Scanner(server.getInputStream());
                 
                 PrintWriter socketOut = new PrintWriter(new BufferedOutputStream(server.getOutputStream()));
@@ -34,23 +35,15 @@ public class Client implements Runnable{
                 handleGETRequest(urlRequest, socketOut);
 
                 System.out.println(getRequest + " " +  urlRequest);
-
-                // String helloWorld = "<html><body>helloWorld </body></html>";
-                // socketOut.write("HTTP/1.1 200 OK\r\n");
-                // socketOut.write("Content-Type: text/html\r\n");
-                // socketOut.write("Content-length: " + helloWorld.length() + "\r\n");
-                // socketOut.write("\r\n" + helloWorld + "\r\n\r\n");
-                // socketOut.flush();
-            // }           
         }
         catch (IOException e) {
             System.out.println("-- closing program due to IOException being thrown --");
             System.out.println("-- " + e.getCause() + " --");
         }
         catch (Exception e) {
-            System.out.println("-- exception thrown closing server --");
-            System.out.println("-- " + e.getMessage() + " --");
-            e.printStackTrace();
+            // System.out.println("-- exception thrown closing server --");
+            // System.out.println("-- " + e.getMessage() + " --");
+            // e.printStackTrace();
         } finally {
             System.out.println("Responded to request");
         }
@@ -72,7 +65,12 @@ public class Client implements Runnable{
                     String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
                     socketOut.write("HTTP/1.1 200 OK\r\n");
                     socketOut.write("Content-Type: text/html\r\n");
-                    splitHtml[0].concat(print());
+                    splitHtml[0] += print();
+                    splitHtml[0] += splitHtml[1];
+                    socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
+                    socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
+                    socketOut.flush();            
+
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -266,13 +264,13 @@ public class Client implements Runnable{
     }
 
 
-    private Boolean addUser(String name, String number, PrintStream out){
+    private Boolean addUser(String name, String number){
 
         String digits = "[0-9]+";
         String alpha = "[A-Za-z]+";
 
         if (!(number.matches(digits)) || !(name.matches(alpha)) || (number.length() != 10)){
-            out.println("Please make sure that <name> contains only letters and <number> contains strictly 10 numbers.");
+            System.out.println("Please make sure that <name> contains only letters and <number> contains strictly 10 numbers.");
             return false;
         }
 
@@ -296,7 +294,7 @@ public class Client implements Runnable{
         try {
             friendList = read();
             for (int i = 0; i < friendList.size(); ++i) {
-                returnThis.concat(friendList.get(i).toString());
+                returnThis += friendList.get(i).toString() + "\r\n";
             }
         } finally {
             r.unlock();
