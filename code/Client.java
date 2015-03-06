@@ -69,11 +69,72 @@ public class Client implements Runnable{
                     splitHtml[0] += splitHtml[1];
                     socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
                     socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
-                    socketOut.flush();            
+                    socketOut.flush();
 
                 } catch (Exception e){
                     e.printStackTrace();
                 }
+            }
+            else if (splitGetRequest[0].compareTo("/add") == 0) {
+                try {
+                    String httpResponse = getHtmlText("Html_Page/add.html");
+                    String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
+                    socketOut.write("HTTP/1.1 200 OK\r\n");
+                    socketOut.write("Content-Type: text/html\r\n");
+
+                    String[] parameters = splitGetRequest[1].split("\\&");
+                    // System.out.println("-- Name: " + parameters[0]);
+                    // System.out.println("-- Number: " + parameters[1]);
+                    System.out.println("Adding new user");
+                    String tempName = parameters[0].substring(5, parameters[0].length());
+                    String tempNum = parameters[1].substring(7, parameters[1].length());
+
+                    System.out.println("-- Name: ." + tempName.replace('+', ' ') + ".");
+                    System.out.println("-- Number: ." + tempNum + ".");
+                    addUser(
+                            tempName.replace('+', ' '),
+                            tempNum
+                        );
+
+                    splitHtml[0] += print();
+                    splitHtml[0] += splitHtml[1];
+                    socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
+                    socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
+                    socketOut.flush();                                
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (splitGetRequest[0].compareTo("/find") == 0) {
+                try {
+                    String httpResponse = getHtmlText("Html_Page/add.html");
+                    String[] splitHtml = httpResponse.split("\\?\\?\\?",2);
+                    socketOut.write("HTTP/1.1 200 OK\r\n");
+                    socketOut.write("Content-Type: text/html\r\n");
+
+                    String[] parameters = splitGetRequest[1].split("\\&");
+                    // System.out.println("-- Name: " + parameters[0]);
+                    // System.out.println("-- Number: " + parameters[1]);
+                    System.out.println("Adding new user");
+                    String tempName = parameters[0].substring(5, parameters[0].length());
+                    String tempNum = parameters[1].substring(7, parameters[1].length());
+
+                    System.out.println("-- Name: ." + tempName.replace('+', ' ') + ".");
+                    System.out.println("-- Number: ." + tempNum + ".");
+                    // find(
+                            // tempName.replace('+', ' '),
+                            // socketOut.
+                        // );
+
+
+                    splitHtml[0] += print();
+                    splitHtml[0] += splitHtml[1];
+                    socketOut.write("Content-length: " + splitHtml[0].length() + "\r\n");
+                    socketOut.write("\r\n" + splitHtml[0] + "\r\n\r\n");
+                    socketOut.flush();                                
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }                
             }
         }
     }
@@ -267,7 +328,7 @@ public class Client implements Runnable{
     private Boolean addUser(String name, String number){
 
         String digits = "[0-9]+";
-        String alpha = "[A-Za-z]+";
+        String alpha = "[A-Za-z ]+";
 
         if (!(number.matches(digits)) || !(name.matches(alpha)) || (number.length() != 10)){
             System.out.println("Please make sure that <name> contains only letters and <number> contains strictly 10 numbers.");
@@ -294,7 +355,7 @@ public class Client implements Runnable{
         try {
             friendList = read();
             for (int i = 0; i < friendList.size(); ++i) {
-                returnThis += friendList.get(i).toString() + "\r\n";
+                returnThis += friendList.get(i).toString() + "<br />";
             }
         } finally {
             r.unlock();

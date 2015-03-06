@@ -6,12 +6,13 @@
 	</head>
 	<body>
 		<div id="functionDiv">
-			<form action="/placholder" method="GET">
+			<form action="" method="GET">
 				<fieldset>
-				<legend>Add</legend>
-					<input type="text" placeholder="Name Surname" />
-					<input type="text" placeholder="Phone" />
-					<button type="submit">Submit</button>
+					<legend>Add</legend>
+					<input name="name" type="text" placeholder="Name Surname" />
+					<input name="number" type="text" placeholder="Phone" />
+					<button type="submit" formaction="/add">Submit</button>
+					<button type="submit" formaction="/find"> Search for entry </button>
 				</fieldset>
 			</form>
 			<form action="/print" method="GET">
@@ -19,8 +20,6 @@
 					<legend>Print</legend>
 					<button type="submit" method="GET">Print all names</button>
 				</fieldset>
-
-				
 			</form>
 		</div>
 
