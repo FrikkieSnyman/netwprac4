@@ -1,3 +1,7 @@
+// Created by:
+// Fredercik Hendrik Snyman 13028741
+// Hugo Greyvenstein        13019989
+
 import java.io.*;
 import java.net.*;
 import java.security.*;
